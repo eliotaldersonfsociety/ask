@@ -5,7 +5,7 @@
       "src": "front/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "front/.next"  // Asegúrate de que coincida con la salida de `next build`
+        "distDir": "front/.next" 
       }
     },
     {
