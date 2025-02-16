@@ -7,7 +7,7 @@
     "build": "npm run build",
     "start": "npm run dev",
     "lint": "next lint",
-    "export": "npm run dev export"
+    "export": "next export"
   },
   "dependencies": {
     "@paypal/react-paypal-js": "^8.8.1",
