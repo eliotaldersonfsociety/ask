@@ -1,4 +1,3 @@
-// Importaciones necesarias
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -170,4 +169,14 @@ export default function ProductPage() {
       <Footer />
     </div>
   );
+}
+
+// Generar parámetros estáticos para exportación
+export async function generateStaticParams() {
+  // Debes obtener estos IDs de tus productos mediante una API o base de datos
+  const ids = ['1', '2', '3'];  // Aquí pon los IDs de tus productos reales
+
+  return ids.map((id) => ({
+    id,
+  }));
 }
