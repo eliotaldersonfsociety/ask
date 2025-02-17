@@ -1,9 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useParams } from 'next/navigation';
-import { notFound } from 'next/navigation';
 import { useCart } from '../../pages/context/CartContext';
 import { useSession } from '../../pages/context/SessionContext';
 import Header from '@/app/pages/Header';
@@ -15,15 +13,14 @@ import ProductDetails from '../checking/ProductDetails';
 import PaymentMethods from '../checking/Payments';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, CircleDollarSign } from 'lucide-react';
-import ClipLoader from 'react-spinners/ClipLoader';
 import Footer from '../checkout/footer';
 
-const ck = "ck_10f8bd17af5190cd0c2f0f17aaa8098a1cdf1f46";
-const cs = "cs_1a7d245efb14ac7d786712aeb568f2a11adddb73";
+// Fetch product data function moved here
+export async function fetchProductData(id: string) {
+  const ck = "ck_10f8bd17af5190cd0c2f0f17aaa8098a1cdf1f46";
+  const cs = "cs_1a7d245efb14ac7d786712aeb568f2a11adddb73";
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-
-async function fetchProductData(id: string) {
   const res = await fetch(`https://texasstore-108ac1a.ingress-haven.ewp.live/wp-json/wc/v3/products/${id}`, {
     headers: {
       Authorization: `Basic ${Buffer.from(`${ck}:${cs}`).toString("base64")}`,
