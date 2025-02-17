@@ -1,11 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useParams } from 'next/navigation';
-import { notFound } from 'next/navigation';
 import { useCart } from '../../pages/context/CartContext';
-import { useSession } from '../../pages/context/SessionContext'; // Importar useSession
+import { useSession } from '../../pages/context/SessionContext'; 
 import Header from '@/app/pages/Header';
 import Breadcrumbs from '../checking/Breadcrumbs';
 import ProductImages from '../checking/ProductImages';
@@ -18,83 +16,25 @@ import { ShoppingCart, CircleDollarSign } from 'lucide-react';
 import ClipLoader from 'react-spinners/ClipLoader';
 import Footer from '../checkout/footer';
 
-const ck = "ck_10f8bd17af5190cd0c2f0f17aaa8098a1cdf1f46";
-const cs = "cs_1a7d245efb14ac7d786712aeb568f2a11adddb73";
-
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-
-async function fetchProductData(id: string) {
-  const res = await fetch(`https://texasstore-108ac1a.ingress-haven.ewp.live/wp-json/wc/v3/products/${id}`, {
-    headers: {
-      Authorization: `Basic ${Buffer.from(`${ck}:${cs}`).toString("base64")}`,
-    },
-  });
-
-  if (!res.ok) {
-    console.error("Error fetching product:", res.statusText);
-    return null;
-  }
-
-  const data = await res.json();
-  return data;
+interface Product {
+  id: number;
+  name: string;
+  price: string;
+  regular_price: string;
+  images: { src: string }[];
+  categories: { name: string }[];
+  attributes: { name: string; options: string[] }[];
+  average_rating: string;
+  rating_count: number;
+  description: string;
+  slug: string;
 }
 
-export default function ProductPage() {
+export default function ProductPage({ product }: { product: Product }) {
   const router = useRouter();
-  const { id } = useParams();
   const { addToCart, cart } = useCart(); // Obtener cart de useCart
   const { session } = useSession(); // Obtener sesión de useSession
-  interface Product {
-    id: number;
-    name: string;
-    price: string;
-    regular_price: string;
-    images: { src: string }[];
-    categories: { name: string }[];
-    attributes: { name: string; options: string[] }[];
-    average_rating: string;
-    rating_count: number;
-    description: string;
-    slug: string;
-  }
-
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [mainImage, setMainImage] = useState<string>('');
-
-  useEffect(() => {
-    const loadProduct = async () => {
-      if (!id) return;
-
-      try {
-        setLoading(true); // Inicia el indicador de carga
-        const productData = await fetchProductData(id as string);
-        if (!productData) {
-          notFound();
-        }
-        setProduct(productData);
-        setMainImage(productData.images[0]?.src || "/placeholder.svg");
-      } catch (error) {
-        console.error("Error loading product:", error);
-      } finally {
-        setLoading(false); // Detiene el indicador de carga
-      }
-    };
-
-    loadProduct();
-  }, [id]);
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen bg-gray-100">
-        <ClipLoader color="#AC252D" size={50} />
-      </div>
-    );
-  }
-
-  if (!product) {
-    return <div>Product not found.</div>;
-  }
+  const [mainImage, setMainImage] = useState<string>(product.images[0]?.src || "/placeholder.svg");
 
   const handleAddToCart = () => {
     const cartItem = {
@@ -169,4 +109,4 @@ export default function ProductPage() {
       <Footer />
     </div>
   );
-} 
+}
