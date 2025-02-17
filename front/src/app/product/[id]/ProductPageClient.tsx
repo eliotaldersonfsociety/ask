@@ -15,6 +15,21 @@ import { Button } from '@/components/ui/button';
 import { ShoppingCart, CircleDollarSign } from 'lucide-react';
 import Footer from '../checkout/footer';
 
+// Definimos el tipo Product
+type Product = {
+  id: number;
+  name: string;
+  price: string;
+  regular_price: string;
+  images: { src: string }[];
+  categories: { name: string }[];
+  attributes: { name: string; options: string[] }[];
+  average_rating: string;
+  rating_count: number;
+  description: string;
+  slug: string;
+};
+
 // Fetch product data function moved here
 export async function fetchProductData(id: string) {
   const ck = "ck_10f8bd17af5190cd0c2f0f17aaa8098a1cdf1f46";
@@ -36,7 +51,7 @@ export async function fetchProductData(id: string) {
   return data;
 }
 
-export default function ProductPageClient({ product }: { product: any }) {
+export default function ProductPageClient({ product }: { product: Product }) {
   const router = useRouter();
   const { addToCart, cart } = useCart();
   const { session } = useSession();
