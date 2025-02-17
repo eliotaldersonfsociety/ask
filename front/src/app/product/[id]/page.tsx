@@ -15,5 +15,6 @@ export default async function ProductPage({ params }: { params: { id: string } }
     return <div>Product not found.</div>;
   }
 
-  return <ProductPageClient product={productData} />;
+  // Aplicamos el tipo Product a la prop que pasamos a ProductPageClient
+  return <ProductPageClient product={productData as Product} />;
 }
