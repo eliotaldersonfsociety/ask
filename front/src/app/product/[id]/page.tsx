@@ -13,7 +13,6 @@ import ProductDetails from '../checking/ProductDetails';
 import PaymentMethods from '../checking/Payments';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, CircleDollarSign } from 'lucide-react';
-import ClipLoader from 'react-spinners/ClipLoader';
 import Footer from '../checkout/footer';
 
 interface Product {
