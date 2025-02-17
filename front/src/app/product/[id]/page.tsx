@@ -1,3 +1,6 @@
+// Importaciones necesarias
+'use client';  // Esto marca este archivo como un componente del lado del cliente
+
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
@@ -16,7 +19,6 @@ import { ShoppingCart, CircleDollarSign } from 'lucide-react';
 import ClipLoader from 'react-spinners/ClipLoader';
 import Footer from '../checkout/footer';
 
-// const ck y cs deberían ser configurados en el entorno, pero los dejamos por ahora.
 const ck = "ck_10f8bd17af5190cd0c2f0f17aaa8098a1cdf1f46";
 const cs = "cs_1a7d245efb14ac7d786712aeb568f2a11adddb73";
 
@@ -52,48 +54,11 @@ interface Product {
   slug: string;
 }
 
-export default function ProductPage() {
+export default function ProductPage({ product }: { product: Product }) {
   const router = useRouter();
-  const { id } = useParams();
   const { addToCart, cart } = useCart();
   const { session } = useSession();
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [mainImage, setMainImage] = useState<string>('');
-
-  useEffect(() => {
-    const loadProduct = async () => {
-      if (!id) return;
-
-      try {
-        setLoading(true); // Cargar el producto
-        const productData = await fetchProductData(id as string);
-        if (!productData) {
-          notFound(); // Si no se encuentra el producto
-        }
-        setProduct(productData);
-        setMainImage(productData.images[0]?.src || "/placeholder.svg");
-      } catch (error) {
-        console.error("Error loading product:", error);
-      } finally {
-        setLoading(false); // Detener el loading
-      }
-    };
-
-    loadProduct();
-  }, [id]);
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen bg-gray-100">
-        <ClipLoader color="#AC252D" size={50} />
-      </div>
-    );
-  }
-
-  if (!product) {
-    return <div>Product not found.</div>;
-  }
+  const [mainImage, setMainImage] = useState<string>(product.images[0]?.src || "/placeholder.svg");
 
   const handleAddToCart = () => {
     const cartItem = {
@@ -169,12 +134,32 @@ export default function ProductPage() {
   );
 }
 
-// Generar parámetros estáticos para exportación
-export async function generateStaticParams() {
-  // Debes obtener estos IDs de tus productos mediante una API o base de datos
-  const ids = ['1', '2', '3'];  // Aquí pon los IDs de tus productos reales
+export async function getStaticPaths() {
+  // Aquí obtienes los IDs de los productos
+  const ids = ['1', '2', '3']; // Deberías hacer una petición a tu API para obtener estos IDs dinámicamente
 
-  return ids.map((id) => ({
-    id,
+  const paths = ids.map(id => ({
+    params: { id },
   }));
+
+  return {
+    paths,
+    fallback: false, // Si un producto no tiene una página estática, Next.js lo mostrará como una página de error
+  };
+}
+
+export async function getStaticProps({ params }: { params: { id: string } }) {
+  const productData = await fetchProductData(params.id);
+
+  if (!productData) {
+    return {
+      notFound: true,
+    };
+  }
+
+  return {
+    props: {
+      product: productData,
+    },
+  };
 }
