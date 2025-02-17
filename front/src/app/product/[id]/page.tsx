@@ -1,9 +1,8 @@
-import { generateStaticParams } from 'next';
 import { fetchProductData } from './ProductPageClient';
 import ProductPageClient from './ProductPageClient';
 
 export async function generateStaticParams() {
-  const productIds = ['1', '2', '3']; // Obtén estos de tu API
+  const productIds = ['1', '2', '3']; // Obtén estos de tu API o fuente de datos
   return productIds.map(id => ({
     id,
   }));
