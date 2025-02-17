@@ -1,5 +1,5 @@
 // Importaciones necesarias
-'use client';  // Esto marca este archivo como un componente del lado del cliente
+'use client';
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -78,10 +78,8 @@ export default function ProductPage({ product }: { product: Product }) {
     }
 
     if (session) {
-      // Si el usuario está logueado, redirigir a PayPal (simulado aquí como ejemplo)
       router.push('/payments');
     } else {
-      // Si el usuario no está logueado, redirigir al checkout
       router.push('/product/checkout/');
     }
   };
@@ -134,32 +132,17 @@ export default function ProductPage({ product }: { product: Product }) {
   );
 }
 
-export async function getStaticPaths() {
-  // Aquí obtienes los IDs de los productos
-  const ids = ['1', '2', '3']; // Deberías hacer una petición a tu API para obtener estos IDs dinámicamente
+// Reemplaza getStaticProps con generateStaticParams
+export async function generateStaticParams() {
+  const productIds = ['1', '2', '3']; // Deberías obtener estos datos de una API o base de datos
 
-  const paths = ids.map(id => ({
-    params: { id },
+  return productIds.map(id => ({
+    id,
   }));
-
-  return {
-    paths,
-    fallback: false, // Si un producto no tiene una página estática, Next.js lo mostrará como una página de error
-  };
 }
 
-export async function getStaticProps({ params }: { params: { id: string } }) {
-  const productData = await fetchProductData(params.id);
-
-  if (!productData) {
-    return {
-      notFound: true,
-    };
-  }
-
-  return {
-    props: {
-      product: productData,
-    },
-  };
+// Cambia getStaticProps por el método que maneja la data en el componente
+export async function getProductData(id: string) {
+  const productData = await fetchProductData(id);
+  return productData;
 }
