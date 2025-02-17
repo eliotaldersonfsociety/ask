@@ -49,8 +49,19 @@ const fetchProductData = async (id: string): Promise<Product | null> => {
   }
 };
 
+export async function generateStaticParams() {
+  // Fetch the list of products to pre-render at build time
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`);
+  const products = await res.json();
+
+  // Return an array of dynamic parameters (product IDs) for each page
+  return products.map((product: { id: string }) => ({
+    id: product.id,
+  }));
+}
+
 export default function ProductPage() {
-  const { id } = useParams(); // Solo usamos `id`, no `slug`
+  const { id } = useParams(); // Only using `id`, not `slug`
   const router = useRouter();
   const { addToCart, getTotal, cart } = useCart();
   const { session } = useSession();
@@ -121,7 +132,7 @@ export default function ProductPage() {
   return (
     <div className="bg-gray-100">
       <div className="container mx-auto px-4 py-8">
-        <Breadcrumbs categories={product.categories || []} productSlug={Array.isArray(id) ? id[0] : id} /> {/* Usamos `id` en lugar de `slug` */}
+        <Breadcrumbs categories={product.categories || []} productSlug={Array.isArray(id) ? id[0] : id} />
 
         <div className="grid md:grid-cols-3 gap-4 lg:mx-36">
           <div className="flex justify-center items-start bg-white p-6 rounded-lg shadow-md">
