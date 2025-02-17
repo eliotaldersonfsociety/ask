@@ -1,4 +1,6 @@
 // src/app/product/[id]/page.tsx
+import { Metadata } from 'next';
+
 export async function generateStaticParams() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`, {
     headers: {
@@ -11,9 +13,13 @@ export async function generateStaticParams() {
   }
 
   const products = await res.json();
-  
-  // Generamos los parámetros estáticos para cada producto
+
+  // Generate static parameters for each product
   return products.map((product: { id: string }) => ({
-    id: product.id, // El ID del producto
+    params: { id: product.id }, // Use 'params' key
   }));
+}
+
+export default function ProductPage() {
+  // Your component code here
 }
