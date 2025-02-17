@@ -1,4 +1,3 @@
-import { GetStaticPaths, GetStaticProps } from 'next';
 import ProductPage from '../../components/ProductPage'; // Importa tu componente de página
 
 // Generar las rutas estáticas para todos los productos
