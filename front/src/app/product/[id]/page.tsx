@@ -4,22 +4,6 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
 const API_SECRET = process.env.NEXT_PUBLIC_API_SECRET;
 
-const fetchProductData = async (id: string): Promise<Product | null> => {
-  try {
-    const res = await fetch(`${API_URL}/${id}`, {
-      headers: {
-        Authorization: `Basic ${btoa(`${API_KEY}:${API_SECRET}`)}`,
-      },
-    });
-
-    if (!res.ok) throw new Error(`Error fetching product: ${res.statusText}`);
-    return res.json();
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
-};
-
 export async function generateStaticParams() {
   const res = await fetch(`${API_URL}/products`, {
     headers: {
@@ -42,4 +26,3 @@ export async function generateStaticParams() {
 export default function ProductPage() {
   // Tu código del componente aquí
 }
-
