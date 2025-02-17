@@ -1,4 +1,4 @@
-import ProductPage from '../../components/ProductPage'; // Importa tu componente de página
+import ProductPage from './[id]/'; // Importa tu componente de página
 
 // Generar las rutas estáticas para todos los productos
 export const generateStaticParams = async () => {
