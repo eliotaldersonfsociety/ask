@@ -2,12 +2,12 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { useCart } from '../pages/context/CartContext';
+import { useCart } from '../../pages/context/CartContext';
 import { useSession } from '../../pages/context/SessionContext';
 import Breadcrumbs from '../checking/Breadcrumbs';
 import ProductImages from '../checking/ProductImages';
 import ProductAttributes from '../checking/ProductAttributes';
-import Rating from './checking/Rating';
+import Rating from '../checking/Rating';
 import ProductDetails from '../checking/ProductDetails';
 import PaymentMethods from '../checking/Payments';
 import Footer from '../checking/footer';
