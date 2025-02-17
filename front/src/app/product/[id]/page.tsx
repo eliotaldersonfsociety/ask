@@ -1,3 +1,5 @@
+// src/app/product/[id]/page.tsx
+
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -49,8 +51,29 @@ const fetchProductData = async (id: string): Promise<Product | null> => {
   }
 };
 
+// Aquí agregamos la función generateStaticParams
+export async function generateStaticParams() {
+  // Aquí debes obtener los IDs de todos los productos que existen en tu API o base de datos
+  const res = await fetch(`${API_URL}/products`, {
+    headers: {
+      Authorization: `Basic ${btoa(`${API_KEY}:${API_SECRET}`)}`,
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error(`Error fetching products list: ${res.statusText}`);
+  }
+
+  const products = await res.json();
+  
+  // Generamos los parámetros estáticos para cada producto
+  return products.map((product: { id: string }) => ({
+    id: product.id, // El ID del producto
+  }));
+}
+
 export default function ProductPage() {
-  const { id } = useParams(); // Only using `id`, not `slug`
+  const { id } = useParams();
   const router = useRouter();
   const { addToCart, getTotal, cart } = useCart();
   const { session } = useSession();
