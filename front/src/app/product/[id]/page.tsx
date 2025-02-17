@@ -1,9 +1,19 @@
 // src/app/product/[id]/page.tsx
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_KEY = process.env.NEXT_PUBLIC_API_KEY;
+const API_SECRET = process.env.NEXT_PUBLIC_API_SECRET;
 
+const fetchProductData = async (id: string): Promise<Product | null> => {
+  try {
+    const res = await fetch(`${API_URL}/${id}`, {
+      headers: {
+        Authorization: `Basic ${btoa(`${API_KEY}:${API_SECRET}`)}`,
+      },
+    });
 export async function generateStaticParams() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`, {
+  const res = await fetch(`${API_URL}/products`, {
     headers: {
-      Authorization: `Basic ${btoa(`${process.env.NEXT_PUBLIC_API_KEY}:${process.env.NEXT_PUBLIC_API_SECRET}`)}`,
+      Authorization: `Basic ${btoa(`${API_KEY}:${API_SECRET}`)}`,
     },
   });
 
