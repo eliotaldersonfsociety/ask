@@ -1,0 +1,16 @@
+{
+  "name": "ask",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build:front": "cd front && npm install && npm run build",
+    "build:api": "cd api && bun install && bun run build",
+    "build": "npm run build:front && npm run build:api",
+    "dev": "concurrently \"npm run dev:front\" \"npm run dev:api\"",
+    "dev:front": "cd front && npm run dev",
+    "dev:api": "cd api && bun run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^7.0.0"
+  }
+}
